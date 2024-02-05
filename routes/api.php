@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SignupController;
 
 
@@ -24,5 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('auth')->group(function () {
     Route::controller(SignupController::class)->group(function () {
         Route::post('/signup', 'signup');
+    });
+    Route::controller(LoginController::class)->group(function () {
+        Route::post('/login', 'login');
     });
 });

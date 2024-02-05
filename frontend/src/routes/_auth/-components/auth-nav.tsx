@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, MatchRoute } from "@tanstack/react-router";
 
 import { BaseContainer } from "@/components/containers";
 import { Logo } from "@/components/logo";
@@ -13,9 +13,16 @@ export const AuthNav = () => {
                     <Logo />
                     <div className="flex flex-row gap-4">
                         <ModeToggle />
-                        <Link to="/">
-                            <Button className="rounded-md">Login</Button>
-                        </Link>
+                        <MatchRoute to="/signup">
+                            <Link to="/login" preload="intent">
+                                <Button className="rounded-md">Login</Button>
+                            </Link>
+                        </MatchRoute>
+                        <MatchRoute to="/login">
+                            <Link to="/signup" preload="intent">
+                                <Button className="rounded-md">Sign Up</Button>
+                            </Link>
+                        </MatchRoute>
                     </div>
                 </div>
             </BaseContainer>

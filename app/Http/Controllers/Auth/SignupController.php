@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Auth\AuthResource;
-use App\Models\User;
-
 use App\Http\Requests\Auth\SignupRequest;
+
 
 class SignupController extends Controller
 {
