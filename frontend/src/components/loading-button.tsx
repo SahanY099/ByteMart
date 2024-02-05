@@ -6,15 +6,17 @@ interface LoadingButtonProps extends ButtonProps {
     loading: boolean;
 }
 
-export default function LoadingButton({
+export const LoadingButton = ({
     children,
     loading,
     ...props
-}: LoadingButtonProps) {
+}: LoadingButtonProps) => {
     return (
-        <Button {...props} disabled={loading}>
-            {children}
-            {loading && <ReloadIcon className="ml-4 animate-spin" />}
-        </Button>
+        <div>
+            <Button {...props} disabled={loading}>
+                {children}
+                {loading && <ReloadIcon className="ml-4 animate-spin" />}
+            </Button>
+        </div>
     );
-}
+};
