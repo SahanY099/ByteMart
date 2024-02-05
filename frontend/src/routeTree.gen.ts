@@ -6,6 +6,8 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as BrowseImport } from './routes/_browse'
+import { Route as AuthImport } from './routes/_auth'
+import { Route as AuthSignupImport } from './routes/_auth/signup'
 
 // Create Virtual Routes
 
@@ -19,6 +21,11 @@ const BrowseRoute = BrowseImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const BrowseIndexLazyRoute = BrowseIndexLazyImport.update({
   path: '/',
   getParentRoute: () => BrowseRoute,
@@ -29,13 +36,26 @@ const BrowseAboutLazyRoute = BrowseAboutLazyImport.update({
   getParentRoute: () => BrowseRoute,
 } as any).lazy(() => import('./routes/_browse/about.lazy').then((d) => d.Route))
 
+const AuthSignupRoute = AuthSignupImport.update({
+  path: '/signup',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_auth': {
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
     '/_browse': {
       preLoaderRoute: typeof BrowseImport
       parentRoute: typeof rootRoute
+    }
+    '/_auth/signup': {
+      preLoaderRoute: typeof AuthSignupImport
+      parentRoute: typeof AuthImport
     }
     '/_browse/about': {
       preLoaderRoute: typeof BrowseAboutLazyImport
@@ -51,5 +71,6 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
+  AuthRoute.addChildren([AuthSignupRoute]),
   BrowseRoute.addChildren([BrowseAboutLazyRoute, BrowseIndexLazyRoute]),
 ])

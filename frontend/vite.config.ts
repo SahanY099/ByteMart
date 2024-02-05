@@ -5,7 +5,14 @@ import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [react(), TanStackRouterVite()],
+    plugins: [
+        react(),
+        TanStackRouterVite({
+            routeFileIgnorePrefix: "-",
+            routesDirectory: "./src/routes",
+            generatedRouteTree: "./src/routeTree.gen.ts",
+        }),
+    ],
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "./src"),
