@@ -36,6 +36,7 @@ class SignupRequest extends FormRequest
             'password' => [
                 'required',
                 Password::min(8)
+                    ->max(128)
                     ->letters()
                     ->symbols()
             ],

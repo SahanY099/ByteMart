@@ -24,7 +24,7 @@ class SignupController extends Controller
             ]
         );
 
-        $expiration_time = now()->addSeconds(20);
+        $expiration_time = now()->addDay();
 
         $token = $user->createToken('user', ['*'], $expiration_time);
 
