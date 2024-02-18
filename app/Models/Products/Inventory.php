@@ -33,6 +33,6 @@ class Inventory extends Model
 
     public function attributeValues(): BelongsToMany
     {
-        return $this->belongsToMany(AttributeValue::class);
+        return $this->belongsToMany(AttributeValue::class, 'inventory_attribute_value');
     }
 }

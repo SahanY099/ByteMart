@@ -10,6 +10,14 @@ class AttributeValue extends Model
 {
     use HasFactory;
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+
     protected $fillable = ['value'];
 
     public function attributes(): BelongsToMany
@@ -19,6 +27,6 @@ class AttributeValue extends Model
 
     public function inventories(): BelongsToMany
     {
-        return $this->belongsToMany(Inventory::class);
+        return $this->belongsToMany(Inventory::class, 'inventory_attribute_value');
     }
 }
