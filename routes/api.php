@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SignupController;
 
+use App\Http\Controllers\Products\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,5 +29,11 @@ Route::prefix('auth')->group(function () {
     });
     Route::controller(LoginController::class)->group(function () {
         Route::post('/login', 'login');
+    });
+});
+
+Route::prefix('products')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::apiResource('/products', ProductController::class);
     });
 });
