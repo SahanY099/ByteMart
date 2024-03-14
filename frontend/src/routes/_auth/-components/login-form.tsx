@@ -39,7 +39,7 @@ export const LoginForm = () => {
         }
 
         return () => {};
-    }, [status]);
+    }, [status, navigate]);
 
     function onSubmit(values: LoginData) {
         mutate(values);
@@ -92,16 +92,17 @@ export const LoginForm = () => {
                         name="remember"
                         render={({ field }) => (
                             <FormItem className="flex flex-row items-center justify-between space-y-0 rounded-md border p-3 shadow-sm">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
+                                <FormLabel>Remember</FormLabel>
+
                                 <div className="flex flex-row items-center space-y-0 leading-none">
-                                    <FormLabel>Remember</FormLabel>
+                                    <FormControl>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
                                     <Hint
-                                        label="Will be logged in for 30 days"
+                                        label="You will be logged in for 30 days"
                                         side="right"
                                         align="center"
                                         asChild

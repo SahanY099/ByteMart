@@ -38,7 +38,7 @@ export const SignupForm = () => {
         }
 
         return () => {};
-    }, [status]);
+    }, [status, navigate]);
 
     function onSubmit(values: SignupData) {
         mutate(values);
