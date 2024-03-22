@@ -20,8 +20,10 @@ import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { useCommand } from "@/store/dashboard/command";
 import { useSidebar } from "@/store/dashboard/sidebar";
+import { useNavigate } from "@tanstack/react-router";
 
 export function CommandMenu() {
+    const navigate = useNavigate();
     const { open, setOpen } = useCommand();
     const { toggle, collapsed } = useSidebar();
 
@@ -33,11 +35,11 @@ export function CommandMenu() {
             heading: "Suggestions",
             children: [
                 {
-                    id: "suggestions-new-listing",
+                    id: "suggestions-new-product",
                     type: "command",
-                    name: "New Listing",
+                    name: "New Product",
                     icon: Blocks,
-                    action: () => {},
+                    action: () => navigate({ to: "/dashboard/products/new" }),
                 },
                 {
                     id: "suggestions-dark-theme",
@@ -57,22 +59,22 @@ export function CommandMenu() {
         },
         {
             type: "group",
-            heading: "Listings",
+            heading: "Products",
             separated: true,
             children: [
                 {
                     id: "listings-my-listings",
                     type: "command",
-                    name: "My listings",
+                    name: "My Products",
                     icon: BoxIcon,
                     action: () => {},
                 },
                 {
                     id: "listings-new-listing",
                     type: "command",
-                    name: "New Listing",
+                    name: "New Product",
                     icon: Blocks,
-                    action: () => {},
+                    action: () => navigate({ to: "/dashboard/products/new" }),
                 },
             ],
         },

@@ -9,35 +9,35 @@ import { cn } from "@/lib/utils";
 import { useSidebar } from "@/store/dashboard/sidebar";
 
 export const Route = createLazyFileRoute("/dashboard")({
-    component: DashboardLayout,
+  component: DashboardLayout,
 });
 
 function DashboardLayout() {
-    const { collapsed, collapse, expand } = useSidebar();
-    const isScreenLg = useMediaQuery("only screen and (min-width : 1024px)");
+  const { collapsed, collapse, expand } = useSidebar();
+  const isScreenLg = useMediaQuery("only screen and (min-width : 1024px)");
 
-    useEffect(() => {
-        if (isScreenLg) {
-            expand();
-        } else {
-            collapse();
-        }
-    }, [isScreenLg, collapse, expand]);
+  useEffect(() => {
+    if (isScreenLg) {
+      expand();
+    } else {
+      collapse();
+    }
+  }, [isScreenLg, collapse, expand]);
 
-    return (
-        <div className="mx-auto max-w-screen-2xl">
-            <Sidebar />
-            <div
-                className={cn(
-                    "ml-[80px] flex min-h-screen flex-1 flex-col gap-4 p-4 transition-all duration-300 lg:ml-[95px]",
-                    !collapsed && "lg:ml-[215px]",
-                )}
-            >
-                <Header />
-                <div className="flex-1 rounded-lg bg-secondary p-4">
-                    <Outlet />
-                </div>
-            </div>
+  return (
+    <div className="mx-auto max-w-screen-2xl">
+      <Sidebar />
+      <div
+        className={cn(
+          "ml-[80px] flex min-h-screen flex-1 flex-col gap-4 p-4 transition-all duration-300 lg:ml-[95px]",
+          !collapsed && "lg:ml-[215px]",
+        )}
+      >
+        <Header />
+        <div className="flex-1 rounded-lg border-2 p-6">
+          <Outlet />
         </div>
-    );
+      </div>
+    </div>
+  );
 }

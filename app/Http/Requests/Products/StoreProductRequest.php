@@ -36,7 +36,7 @@ class StoreProductRequest extends FormRequest
             'inventories.*.quantity' => 'required|integer',
             'inventories.*.price' => 'required|integer',
             'inventories.*.is_default' => 'required|boolean',
-            'inventories.*.attributes' => ['required', 'exists:attributes,id', new InventoryAttributes],
+            'inventories.*.attributes' => ['required', 'exists:attribute_values,id', new InventoryAttributes],
         ];
     }
 
@@ -47,7 +47,7 @@ class StoreProductRequest extends FormRequest
         // loop through each inventory item
         foreach ($inventories as &$inventory) {
             // if isDefault key exists, rename it to is_default
-            if (isset($inventory['isDefault'])) {
+            if (isset ($inventory['isDefault'])) {
                 $inventory['is_default'] = $inventory['isDefault'];
                 unset($inventory['isDefault']);
             }
@@ -55,7 +55,7 @@ class StoreProductRequest extends FormRequest
 
         $this->merge([
             'inventories' => $inventories,
-            'product_type_id' => $this->productTypeId,
+            'product_type_id' => $this->productType,
         ]);
     }
 }

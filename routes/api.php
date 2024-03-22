@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Products\AttributeController;
+use App\Http\Controllers\Products\ProductTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,4 +38,7 @@ Route::prefix('products')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('/products', ProductController::class);
     });
+
+    Route::apiResource('types', ProductTypeController::class);
+    Route::apiResource('types.attributes', AttributeController::class)->shallow();
 });

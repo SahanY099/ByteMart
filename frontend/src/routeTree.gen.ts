@@ -15,6 +15,12 @@ import { Route as AuthLoginImport } from './routes/_auth/login'
 const DashboardLazyImport = createFileRoute('/dashboard')()
 const BrowseIndexLazyImport = createFileRoute('/_browse/')()
 const BrowseAboutLazyImport = createFileRoute('/_browse/about')()
+const DashboardProductsIndexLazyImport = createFileRoute(
+  '/dashboard/products/',
+)()
+const DashboardProductsNewLazyImport = createFileRoute(
+  '/dashboard/products/new',
+)()
 
 // Create/Update Routes
 
@@ -53,6 +59,22 @@ const AuthLoginRoute = AuthLoginImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
+const DashboardProductsIndexLazyRoute = DashboardProductsIndexLazyImport.update(
+  {
+    path: '/products/',
+    getParentRoute: () => DashboardLazyRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/dashboard/products/index.lazy').then((d) => d.Route),
+)
+
+const DashboardProductsNewLazyRoute = DashboardProductsNewLazyImport.update({
+  path: '/products/new',
+  getParentRoute: () => DashboardLazyRoute,
+} as any).lazy(() =>
+  import('./routes/dashboard/products/new.lazy').then((d) => d.Route),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -85,6 +107,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrowseIndexLazyImport
       parentRoute: typeof BrowseImport
     }
+    '/dashboard/products/new': {
+      preLoaderRoute: typeof DashboardProductsNewLazyImport
+      parentRoute: typeof DashboardLazyImport
+    }
+    '/dashboard/products/': {
+      preLoaderRoute: typeof DashboardProductsIndexLazyImport
+      parentRoute: typeof DashboardLazyImport
+    }
   }
 }
 
@@ -93,5 +123,8 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   AuthRoute.addChildren([AuthLoginRoute, AuthSignupRoute]),
   BrowseRoute.addChildren([BrowseAboutLazyRoute, BrowseIndexLazyRoute]),
-  DashboardLazyRoute,
+  DashboardLazyRoute.addChildren([
+    DashboardProductsNewLazyRoute,
+    DashboardProductsIndexLazyRoute,
+  ]),
 ])
