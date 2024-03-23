@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Products;
 
-use App\Http\Resources\Attributes\AttributeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
