@@ -28,7 +28,8 @@ class AuthResource extends JsonResource
             'token' => [
                 'key' => $this->token->plainTextToken,
                 'expiresAt' => $this->token->accessToken->expires_at
-            ]
+            ],
+            'isAdmin' => $this->is_admin
         ];
     }
 }

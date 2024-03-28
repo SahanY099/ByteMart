@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
+import { getRouteApi } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
@@ -17,12 +17,13 @@ import { Input } from "@/components/ui/input";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 import { Hint } from "@/components/hint";
+import { router } from "@/router";
 import { LoginSchema } from "@/schemas/auth";
 import { useLogin } from "@/services/auth";
 import { LoginData } from "@/types/auth";
 
 export const LoginForm = () => {
-  const navigate = useNavigate({ from: "/login" });
+  const search = getRouteApi("/_auth/login").useSearch();
   const { mutate, isPending, status } = useLogin();
 
   const form = useForm<LoginData>({
@@ -36,11 +37,11 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (status == "success") {
-      navigate({ to: "../" });
+      router.history.push(search.redirect);
     }
 
     return () => {};
-  }, [status, navigate]);
+  }, [status, search]);
 
   function onSubmit(values: LoginData) {
     mutate(values);

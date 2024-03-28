@@ -1,12 +1,12 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import React, { Suspense, useEffect } from "react";
 
 import { Toaster } from "@/components/ui/sonner";
 import { queryClient } from "@/lib/query-client";
-import { useAuthStore } from "@/store/auth";
+import { AuthState, useAuthStore } from "@/store/auth";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
@@ -17,7 +17,11 @@ const TanStackRouterDevtools =
         })),
       );
 
-export const Route = createRootRoute({
+interface RouterContext {
+  auth: AuthState;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => <Root />,
 });
 

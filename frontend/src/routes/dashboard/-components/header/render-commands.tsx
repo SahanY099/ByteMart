@@ -10,12 +10,15 @@ import {
 
 import { useCommand } from "@/store/dashboard/command";
 
+import { useAuthStore } from "@/store/auth";
+
 type Command = {
   type: "command";
   name: string;
   icon: LucideIcon;
   id: string;
   action: () => void;
+  adminOnly?: boolean;
 };
 
 type Group = {
@@ -55,19 +58,27 @@ const RenderCommandGroup = ({ heading, children, separated }: Group) => {
   );
 };
 
-const RenderCommands = ({ commands }: { commands: Commands }) => (
-  <>
-    {commands.map((command, i) => (
-      <Fragment key={i}>
-        {command.type === "group" ? (
-          <RenderCommandGroup {...command} />
-        ) : (
-          <RenderCommandItem {...command} />
-        )}
-      </Fragment>
-    ))}
-  </>
-);
+const RenderCommands = ({ commands }: { commands: Commands }) => {
+  const { user } = useAuthStore();
+
+  return (
+    <>
+      {commands.map((command, i) => (
+        <Fragment key={i}>
+          {command.type === "group" ? (
+            <RenderCommandGroup {...command} />
+          ) : (
+            <>
+              {((command.adminOnly && user.isAdmin) || !command.adminOnly) && (
+                <RenderCommandItem {...command} />
+              )}
+            </>
+          )}
+        </Fragment>
+      ))}
+    </>
+  );
+};
 
 export const RenderCommandList = ({ commands }: { commands: Commands }) => (
   <CommandList>

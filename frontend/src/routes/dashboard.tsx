@@ -1,4 +1,4 @@
-import { Outlet, createLazyFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { useEffect } from "react";
 
@@ -8,8 +8,18 @@ import { Sidebar } from "./dashboard/-components/sidebar";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/store/dashboard/sidebar";
 
-export const Route = createLazyFileRoute("/dashboard")({
+export const Route = createFileRoute("/dashboard")({
   component: DashboardLayout,
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isAuthenticated()) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
 });
 
 function DashboardLayout() {

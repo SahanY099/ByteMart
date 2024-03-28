@@ -5,14 +5,15 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as DashboardImport } from './routes/dashboard'
 import { Route as BrowseImport } from './routes/_browse'
 import { Route as AuthImport } from './routes/_auth'
+import { Route as DashboardAdminImport } from './routes/dashboard/_admin'
 import { Route as AuthSignupImport } from './routes/_auth/signup'
 import { Route as AuthLoginImport } from './routes/_auth/login'
 
 // Create Virtual Routes
 
-const DashboardLazyImport = createFileRoute('/dashboard')()
 const BrowseIndexLazyImport = createFileRoute('/_browse/')()
 const BrowseAboutLazyImport = createFileRoute('/_browse/about')()
 const DashboardProductsIndexLazyImport = createFileRoute(
@@ -21,13 +22,16 @@ const DashboardProductsIndexLazyImport = createFileRoute(
 const DashboardProductsNewLazyImport = createFileRoute(
   '/dashboard/products/new',
 )()
+const DashboardAdminProductTypesIndexLazyImport = createFileRoute(
+  '/dashboard/_admin/product-types/',
+)()
 
 // Create/Update Routes
 
-const DashboardLazyRoute = DashboardLazyImport.update({
+const DashboardRoute = DashboardImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/dashboard.lazy').then((d) => d.Route))
+} as any)
 
 const BrowseRoute = BrowseImport.update({
   id: '/_browse',
@@ -49,6 +53,11 @@ const BrowseAboutLazyRoute = BrowseAboutLazyImport.update({
   getParentRoute: () => BrowseRoute,
 } as any).lazy(() => import('./routes/_browse/about.lazy').then((d) => d.Route))
 
+const DashboardAdminRoute = DashboardAdminImport.update({
+  id: '/_admin',
+  getParentRoute: () => DashboardRoute,
+} as any)
+
 const AuthSignupRoute = AuthSignupImport.update({
   path: '/signup',
   getParentRoute: () => AuthRoute,
@@ -62,7 +71,7 @@ const AuthLoginRoute = AuthLoginImport.update({
 const DashboardProductsIndexLazyRoute = DashboardProductsIndexLazyImport.update(
   {
     path: '/products/',
-    getParentRoute: () => DashboardLazyRoute,
+    getParentRoute: () => DashboardRoute,
   } as any,
 ).lazy(() =>
   import('./routes/dashboard/products/index.lazy').then((d) => d.Route),
@@ -70,10 +79,20 @@ const DashboardProductsIndexLazyRoute = DashboardProductsIndexLazyImport.update(
 
 const DashboardProductsNewLazyRoute = DashboardProductsNewLazyImport.update({
   path: '/products/new',
-  getParentRoute: () => DashboardLazyRoute,
+  getParentRoute: () => DashboardRoute,
 } as any).lazy(() =>
   import('./routes/dashboard/products/new.lazy').then((d) => d.Route),
 )
+
+const DashboardAdminProductTypesIndexLazyRoute =
+  DashboardAdminProductTypesIndexLazyImport.update({
+    path: '/product-types/',
+    getParentRoute: () => DashboardAdminRoute,
+  } as any).lazy(() =>
+    import('./routes/dashboard/_admin/product-types/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -88,7 +107,7 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof rootRoute
     }
     '/dashboard': {
-      preLoaderRoute: typeof DashboardLazyImport
+      preLoaderRoute: typeof DashboardImport
       parentRoute: typeof rootRoute
     }
     '/_auth/login': {
@@ -98,6 +117,10 @@ declare module '@tanstack/react-router' {
     '/_auth/signup': {
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof AuthImport
+    }
+    '/dashboard/_admin': {
+      preLoaderRoute: typeof DashboardAdminImport
+      parentRoute: typeof DashboardImport
     }
     '/_browse/about': {
       preLoaderRoute: typeof BrowseAboutLazyImport
@@ -109,11 +132,15 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/products/new': {
       preLoaderRoute: typeof DashboardProductsNewLazyImport
-      parentRoute: typeof DashboardLazyImport
+      parentRoute: typeof DashboardImport
     }
     '/dashboard/products/': {
       preLoaderRoute: typeof DashboardProductsIndexLazyImport
-      parentRoute: typeof DashboardLazyImport
+      parentRoute: typeof DashboardImport
+    }
+    '/dashboard/_admin/product-types/': {
+      preLoaderRoute: typeof DashboardAdminProductTypesIndexLazyImport
+      parentRoute: typeof DashboardAdminImport
     }
   }
 }
@@ -123,7 +150,8 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   AuthRoute.addChildren([AuthLoginRoute, AuthSignupRoute]),
   BrowseRoute.addChildren([BrowseAboutLazyRoute, BrowseIndexLazyRoute]),
-  DashboardLazyRoute.addChildren([
+  DashboardRoute.addChildren([
+    DashboardAdminRoute.addChildren([DashboardAdminProductTypesIndexLazyRoute]),
     DashboardProductsNewLazyRoute,
     DashboardProductsIndexLazyRoute,
   ]),
